@@ -130,7 +130,7 @@ skill_all_time_list = list(skill_all_time.keywords)
 
 
 # All time line chart
-selector = alt.selection_single(encodings=['x', 'y'])
+selector = alt.selection_point(encodings=['x', 'y'])
 all_time_chart = alt.Chart(skill_all_time).mark_bar(
     cornerRadiusTopLeft=10,
     cornerRadiusTopRight=10    
@@ -139,7 +139,7 @@ all_time_chart = alt.Chart(skill_all_time).mark_bar(
     y=alt.Y('percentage', title="Likelyhood to be in Job Posting", axis=alt.Axis(format='%', labelFontSize=17, titleFontSize=17)),
     color=alt.condition(selector, 'percentage', alt.value('lightgray'), legend=None),
     tooltip=["keywords", alt.Tooltip("percentage", format=".1%")]
-).add_selection(
+).add_params(
     selector
 ).configure_view(
     strokeWidth=0
@@ -153,8 +153,8 @@ source = skill_daily_data
 x = 'date'
 y = 'percentage'
 color = 'keywords'
-selector = alt.selection_single(encodings=['x', 'y'])
-hover = alt.selection_single(
+selector = alt.selection_point(encodings=['x', 'y'])
+hover = alt.selection_point(
     fields=[x],
     nearest=True,
     on="mouseover",
@@ -182,11 +182,11 @@ tooltips = (
         y=y,
         tooltip=[color, alt.Tooltip(y, format=".1%"), x],
     )
-    .add_selection(hover)
+    .add_params(hover)
 )
 daily_trend_chart = (lines + points + tooltips).interactive().configure_view(strokeWidth=0)
 
 if graph_choice == graph_list[0]:
-    st.altair_chart(all_time_chart, use_container_width=True)
+    st.altair_chart(all_time_chart, width="stretch")
 else:
-    st.altair_chart(daily_trend_chart, use_container_width=True)
+    st.altair_chart(daily_trend_chart, width="stretch")

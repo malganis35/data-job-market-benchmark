@@ -65,7 +65,7 @@ salary_df[salary_column] = salary_df[salary_column].astype(int)
 
 # Final visualizations
 try: 
-    selector = alt.selection_single(encodings=['x', 'y'])
+    selector = alt.selection_point(encodings=['x', 'y'])
     salary_chart = alt.Chart(salary_df).mark_bar(
         cornerRadiusTopLeft=10,
         cornerRadiusTopRight=10    
@@ -74,12 +74,12 @@ try:
         y=alt.Y('count()', title="Count of Job Postings", axis=alt.Axis(labelFontSize=17, titleFontSize=17)),
         # color=alt.condition(selector, 'count()', alt.value('lightgray')),
         tooltip=[alt.Tooltip(salary_column, format="$,"), 'count()']
-    ).add_selection(
+    ).add_params(
         selector
     ).configure_view(
         strokeWidth=0
     )
-    st.altair_chart(salary_chart, use_container_width=True)
+    st.altair_chart(salary_chart, width="stretch")
     display_table = st.checkbox("Show table of salaries below 👇🏼")
     if display_table:
         st.markdown("#### 💵 Table of Salaries")

@@ -73,8 +73,8 @@ source = jobs_daily
 x = 'Date'
 y = 'Job Postings'
 # color = 'keywords'
-selector = alt.selection_single(encodings=['x', 'y'])
-hover = alt.selection_single(
+selector = alt.selection_point(encodings=['x', 'y'])
+hover = alt.selection_point(
     fields=[x],
     nearest=True,
     on="mouseover",
@@ -102,12 +102,12 @@ tooltips = (
         y=y,
         tooltip=[y, x],
     )
-    .add_selection(hover)
+    .add_params(hover)
 )
 jobs_daily_chart = (lines + points + tooltips).interactive().configure_view(strokeWidth=0)
 
 st.write(f"#### 📈 Daily job scraping status")
-st.altair_chart(jobs_daily_chart, use_container_width=True)
+st.altair_chart(jobs_daily_chart, width="stretch")
 st.write(f"📆 Collecting data for {delta_days} days now since {first_date}... \n")
 if len(missing_dates) > 0:
     st.write("❌ Missing data for following dates:")
