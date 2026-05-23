@@ -79,14 +79,12 @@ def agg_skill_daily_data(jobs_df):
 
 skill_count = agg_skill_data(jobs_all)
 
-# print(skill_count)
-
 # Top page build
 st.markdown("## 🛠️ What is the TOP Skill for Data Analysts?!?")
 col1, col2, col3, col4 = st.columns(4)
 with col1:
     keyword_list = ["All Tools", "Languages"]
-    keyword_choice = st.radio('Skill:', keyword_list, horizontal=False) # label_visibility="collapsed"
+    keyword_choice = st.radio('Skill:', keyword_list, horizontal=False)
 with col4:
     graph_list = ["All Time", "Daily Trend"]
     graph_choice = st.radio('Time:', graph_list, horizontal=False)
@@ -113,13 +111,10 @@ job_type.insert(0, select_all)
 with st.sidebar:
     st.markdown("# 🛠️ Filters")
     top_n_choice = st.radio("Data Skills:", list(skill_dict.keys()))
-    # skills_choice = st.selectbox("Data Skill:", skills)
     job_type_choice = st.radio("Job Type:", job_type)
     platform_choice = st.selectbox("Social Platform:", platform)
 
 # Side column filter data transform
-# if skills_choice != select_all:
-#     jobs_all = jobs_all[jobs_all.description_tokens.apply(lambda x: skills_choice in x)]
 if platform_choice != select_all:
     jobs_all = jobs_all[jobs_all.via.apply(lambda x: platform_choice in x)]
 if job_type_choice != select_all:
@@ -132,7 +127,6 @@ if keyword_choice != keyword_list[0]:
     skill_all_time = skill_all_time[skill_all_time.keywords.isin(list(keywords_programming.values()))]
 skill_all_time = skill_all_time.head(skill_filter)
 skill_all_time_list = list(skill_all_time.keywords)
-
 
 
 # All time line chart
@@ -172,8 +166,8 @@ lines = (
     .encode(x=alt.X(x, title="Date", axis=alt.Axis(labelFontSize=15, titleFontSize=17)), 
         y=alt.Y(y, title="Likelyhood to be in Job Posting", 
         axis=alt.Axis(format='%', labelFontSize=17, titleFontSize=17)), 
-        color=color) # Modified this
-    .transform_calculate(color='datum.delta < 0 ? "red" : "lightblue"') # doesn't show red for negative delta
+        color=color)
+    .transform_calculate(color='datum.delta < 0 ? "red" : "lightblue"')
 )
 points = (
     lines.transform_filter(hover)
@@ -196,17 +190,3 @@ if graph_choice == graph_list[0]:
     st.altair_chart(all_time_chart, use_container_width=True)
 else:
     st.altair_chart(daily_trend_chart, use_container_width=True)
-
-# Previous Daily Trend Chart
-# selector = alt.selection_single(encodings=['x', 'y'])
-# daily_trend_chart = alt.Chart(skill_daily_data).mark_line().encode(
-#     x=alt.X('date', title=""),
-#     y=alt.Y('percentage', title="Likelyhood to be in Job Posting", axis=alt.Axis(format='%', labelFontSize=17, titleFontSize=17)),
-#     strokeDash='keywords',
-#     color=alt.condition(selector, 'keywords', alt.value('lightgray')),
-#     tooltip=["keywords", alt.Tooltip("percentage", format=".1%"), "date"]
-# ).add_selection(
-#     selector
-# ).configure_view(
-#     strokeWidth=0
-# )
