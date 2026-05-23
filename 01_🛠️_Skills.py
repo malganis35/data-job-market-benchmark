@@ -40,12 +40,14 @@ keywords_programming = {
 # Skill sort, count, and filter list data
 def agg_skill_data(jobs_df):
     keywords_all = {**keywords_skills, **keywords_programming}
-    for index, row in jobs_df.iterrows():
-        for i, token in enumerate(row['description_tokens']):
-            if token.lower() in keywords_all:
-                row['description_tokens'][i] = keywords_all[token.lower()]
-        jobs_df.at[index, 'description_tokens'] = row['description_tokens']
-    skill_data = pd.DataFrame(jobs_df.description_tokens.sum()).value_counts().rename_axis('keywords').reset_index(name='counts')
+    # Explode the lists of tokens into individual rows (vectorized)
+    exploded = jobs_df['description_tokens'].explode()
+    # Strip whitespace
+    cleaned_exploded = exploded.str.strip()
+    # Map lowercase tokens to capitalized/correct keywords, keeping original if not found
+    mapped_exploded = cleaned_exploded.str.lower().map(keywords_all).fillna(cleaned_exploded)
+    # Count occurrences
+    skill_data = mapped_exploded.value_counts().rename_axis('keywords').reset_index(name='counts')
     skill_data = skill_data[skill_data.keywords != '']
     skill_data['percentage'] = skill_data.counts / len(jobs_df)
     return skill_data
@@ -53,23 +55,27 @@ def agg_skill_data(jobs_df):
 
 # Aggregate skills daily
 def agg_skill_daily_data(jobs_df):
+    jobs_df = jobs_df.copy()
     jobs_df['date'] = jobs_df.date_time.dt.date
-    first_date = jobs_all.date.min()
-    last_date = jobs_all.date.max()
-    list_dates = pd.date_range(first_date,last_date,freq='d')
-    list_dates = pd.DataFrame(list_dates)
-    list_dates = list_dates[0].dt.date
-    skill_daily_df = pd.DataFrame()
-    for date in list_dates:
-        date_df = jobs_df[jobs_df.date == date]
-        if len(date_df) == 0: # throws error if df is blank
-            continue
-        date_agg_df = pd.DataFrame(date_df.description_tokens.sum()).value_counts().rename_axis('keywords').reset_index(name='counts')
-        date_agg_df = date_agg_df[date_agg_df.keywords != '']
-        date_agg_df['percentage'] = date_agg_df.counts / len(date_df)
-        date_agg_df['date'] = date
-        skill_daily_df = pd.concat([date_agg_df, skill_daily_df], ignore_index=True, axis=0)
-    return skill_daily_df
+    keywords_all = {**keywords_skills, **keywords_programming}
+    
+    # Explode the description tokens column and keep alignment with the date
+    df_exploded = jobs_df[['date', 'description_tokens']].explode('description_tokens')
+    df_exploded['description_tokens'] = df_exploded['description_tokens'].str.strip()
+    
+    # Map keywords vectorially
+    df_exploded['keywords'] = df_exploded['description_tokens'].str.lower().map(keywords_all).fillna(df_exploded['description_tokens'])
+    df_exploded = df_exploded[df_exploded['keywords'] != '']
+    
+    # Group by date and keywords, then count occurrences
+    grouped = df_exploded.groupby(['date', 'keywords']).size().reset_index(name='counts')
+    
+    # Merge with daily total job counts to compute the percentage
+    jobs_per_date = jobs_df.groupby('date').size().reset_index(name='total_jobs')
+    grouped = grouped.merge(jobs_per_date, on='date')
+    grouped['percentage'] = grouped['counts'] / grouped['total_jobs']
+    
+    return grouped.drop(columns=['total_jobs'])
 
 skill_count = agg_skill_data(jobs_all)
 

@@ -18,7 +18,7 @@ jobs_data = jobs_all[jobs_all.salary_avg.notna()]
 
 # Skill sort, count, and filter list data
 select_all = "Select All"
-skill_count = pd.DataFrame(jobs_all.description_tokens.sum()).value_counts().rename_axis('keywords').reset_index(name='counts')
+skill_count = jobs_all.description_tokens.explode().str.strip().value_counts().rename_axis('keywords').reset_index(name='counts')
 skill_count = skill_count[skill_count.keywords != '']
 skills = list(skill_count.keywords)
 skills.insert(0, select_all)
