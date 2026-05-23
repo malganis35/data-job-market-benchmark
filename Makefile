@@ -2,7 +2,7 @@
 
 # Configurable variables
 PYTHON = python3
-STREAMLIT_APP = main.py
+STREAMLIT_APP = Home.py
 
 .PHONY: help install pip-install run pip-run clean
 
