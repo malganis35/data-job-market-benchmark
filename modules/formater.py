@@ -14,7 +14,7 @@ class Title(object):
     
     def page_config(self, title):
         self.title = title
-        st.set_page_config(page_title=self.title, page_icon=self.img)
+        st.set_page_config(page_title=self.title, page_icon=self.img, layout="wide")
 
 class Footer:
     """"
