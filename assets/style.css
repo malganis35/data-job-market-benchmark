@@ -241,3 +241,12 @@ header {
     color: #718096;
     margin-top: 0.25rem;
 }
+
+/* Clickable Card Link wrappers */
+.card-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block;
+    height: 100%;
+}
+

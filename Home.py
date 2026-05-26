@@ -126,22 +126,26 @@ col_left, col_right = st.columns(2)
 with col_left:
     st.markdown(
         """
-        <div class="feature-card">
-            <span class="feature-icon">🛠️</span>
-            <h3 class="feature-title">Skills Analysis</h3>
-            <p class="feature-desc">Discover the top skills (SQL, Python, Excel, Power BI) employers seek. Compare overall demand or track daily skill percentage fluctuations over time.</p>
-        </div>
+        <a href="/Skills" target="_self" class="card-link">
+            <div class="feature-card">
+                <span class="feature-icon">🛠️</span>
+                <h3 class="feature-title">Skills Analysis</h3>
+                <p class="feature-desc">Discover the top skills (SQL, Python, Excel, Power BI) employers seek. Compare overall demand or track daily skill percentage fluctuations over time.</p>
+            </div>
+        </a>
         """,
         unsafe_allow_html=True
     )
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(
         """
-        <div class="feature-card">
-            <span class="feature-icon">🏥</span>
-            <h3 class="feature-title">Scraping Pipeline Health</h3>
-            <p class="feature-desc">Audit the daily data collection pipeline. Track average volume collected per day, percent increase, database expansion rates, and date alignment.</p>
-        </div>
+        <a href="/Health" target="_self" class="card-link">
+            <div class="feature-card">
+                <span class="feature-icon">🏥</span>
+                <h3 class="feature-title">Scraping Pipeline Health</h3>
+                <p class="feature-desc">Audit the daily data collection pipeline. Track average volume collected per day, percent increase, database expansion rates, and date alignment.</p>
+            </div>
+        </a>
         """,
         unsafe_allow_html=True
     )
@@ -149,22 +153,26 @@ with col_left:
 with col_right:
     st.markdown(
         """
-        <div class="feature-card">
-            <span class="feature-icon">💸</span>
-            <h3 class="feature-title">Salary Insights</h3>
-            <p class="feature-desc">Visualize salary histograms for Data Analysts. Sift through annual base pay, hourly rates, or standardized scales filtered by programming skills.</p>
-        </div>
+        <a href="/Salary" target="_self" class="card-link">
+            <div class="feature-card">
+                <span class="feature-icon">💸</span>
+                <h3 class="feature-title">Salary Insights</h3>
+                <p class="feature-desc">Visualize salary histograms for Data Analysts. Sift through annual base pay, hourly rates, or standardized scales filtered by programming skills.</p>
+            </div>
+        </a>
         """,
         unsafe_allow_html=True
     )
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(
         """
-        <div class="feature-card">
-            <span class="feature-icon">🌎</span>
-            <h3 class="feature-title">Interactive Data Explorer</h3>
-            <p class="feature-desc">Filter, sort, and search through the raw dataset. Build custom queries using search terms, location patterns, or job schedule categories.</p>
-        </div>
+        <a href="/Explore" target="_self" class="card-link">
+            <div class="feature-card">
+                <span class="feature-icon">🌎</span>
+                <h3 class="feature-title">Interactive Data Explorer</h3>
+                <p class="feature-desc">Filter, sort, and search through the raw dataset. Build custom queries using search terms, location patterns, or job schedule categories.</p>
+            </div>
+        </a>
         """,
         unsafe_allow_html=True
     )
@@ -174,11 +182,13 @@ col_about, col_guide = st.columns(2)
 with col_about:
     st.markdown(
         """
-        <div class="feature-card">
-            <span class="feature-icon">📊</span>
-            <h3 class="feature-title">About & Resources</h3>
-            <p class="feature-desc">Learn about the project goal, resources used (SerpApi free search tier), Kaggle job postings dataset details, and link to GitHub and YouTube.</p>
-        </div>
+        <a href="/About" target="_self" class="card-link">
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3 class="feature-title">About & Resources</h3>
+                <p class="feature-desc">Learn about the project goal, resources used (SerpApi free search tier), Kaggle job postings dataset details, and link to GitHub and YouTube.</p>
+            </div>
+        </a>
         """,
         unsafe_allow_html=True
     )
