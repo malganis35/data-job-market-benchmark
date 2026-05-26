@@ -18,7 +18,11 @@ class DataImport:
             "gsearch_jobs.csv",
         ).replace("'","", regex=True)
         jobs_data.date_time = pd.to_datetime(jobs_data.date_time)
-        jobs_data = jobs_data.drop(labels=['Unnamed: 0', 'index'], axis=1, errors='ignore')
+        jobs_data = jobs_data.drop(
+            labels=['Unnamed: 0', 'index', 'description', 'thumbnail', 'extensions'], 
+            axis=1, 
+            errors='ignore'
+        )
         jobs_data.description_tokens = jobs_data.description_tokens.str.strip("[]").str.split(",") # fix major formatting issues with tokens
         jobs_data.description_tokens = jobs_data.description_tokens.apply(lambda row: [x.strip(" ") for x in row]) # remove whitespace from tokens
         return jobs_data
