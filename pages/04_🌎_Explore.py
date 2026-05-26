@@ -97,4 +97,28 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-st.dataframe(filter_dataframe(jobs_all))
+filtered_df = filter_dataframe(jobs_all)
+row_count = len(filtered_df)
+
+st.markdown("---")
+st.markdown("### 📊 Display Settings")
+col1, col2 = st.columns((1, 2))
+with col1:
+    max_display_rows = st.number_input(
+        "Max rows to render:",
+        min_value=10,
+        max_value=max(10, row_count),
+        value=min(1000, row_count),
+        step=100,
+        help="Adjust this parameter to control the maximum number of rows rendered in the table."
+    )
+
+if row_count > max_display_rows:
+    st.warning(
+        f"⚠️ **Showing the first {max_display_rows:,} rows out of {row_count:,} matching rows.** "
+        f"Increase 'Max rows to render' above if you want to view more, or add filters to narrow down the results."
+    )
+    st.dataframe(filtered_df.head(max_display_rows))
+else:
+    st.success(f"✅ **Showing all {row_count:,} matching rows.**")
+    st.dataframe(filtered_df)
