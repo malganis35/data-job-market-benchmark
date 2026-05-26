@@ -19,6 +19,9 @@ jobs_all = DataImport().fetch_and_clean_data()
 
 st.markdown("## 🌎 Explore the dataset")
 
+# Dynamic metric container to show totals at the top
+metric_container = st.container()
+
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
@@ -99,6 +102,14 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 filtered_df = filter_dataframe(jobs_all)
 row_count = len(filtered_df)
+
+# Populate top metric cards dynamically
+with metric_container:
+    col_tot1, col_tot2 = st.columns(2)
+    with col_tot1:
+        st.metric(label="Total Jobs in Database", value=f"{len(jobs_all):,}")
+    with col_tot2:
+        st.metric(label="Matching Jobs (Filtered)", value=f"{row_count:,}")
 
 st.markdown("---")
 st.markdown("### 📊 Display Settings")
